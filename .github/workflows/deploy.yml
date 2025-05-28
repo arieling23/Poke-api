@@ -18,14 +18,14 @@ jobs:
     - name: Build & Push backend
       run: |
         cd backend
-        docker build -t tuusuario/pokemon-backend .
-        docker push tuusuario/pokemon-backend
+        docker build -t arieling/pokemon-backend .
+        docker push arieling/pokemon-backend
 
     - name: Build & Push frontend
       run: |
         cd frontend
-        docker build -t tuusuario/pokemon-frontend .
-        docker push tuusuario/pokemon-frontend
+        docker build -t arieling/pokemon-frontend .
+        docker push arieling/pokemon-frontend
 
     - name: Deploy on EC2
       uses: appleboy/ssh-action@v0.1.6
