@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build & Push backend
+      run: |
+        cd backend
+        docker build -t tuusuario/pokemon-backend .
+        docker push tuusuario/pokemon-backend
+
+    - name: Build & Push frontend
+      run: |
+        cd frontend
+        docker build -t tuusuario/pokemon-frontend .
+        docker push tuusuario/pokemon-frontend
+
+    - name: Deploy on EC2
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          docker pull tuusuario/pokemon-backend
+          docker pull tuusuario/pokemon-frontend
+          docker stop backend || true && docker rm backend || true
+          docker stop frontend || true && docker rm frontend || true
+          docker run -d -p 3000:3000 --name backend tuusuario/pokemon-backend
+          docker run -d -p 3001:3000 --name frontend tuusuario/pokemon-frontend
