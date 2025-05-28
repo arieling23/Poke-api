@@ -34,9 +34,10 @@ jobs:
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
         script: |
-          docker pull arieling/pokemon-backend
-          docker pull arieling/pokemon-frontend
-          docker stop backend || true && docker rm backend || true
-          docker stop frontend || true && docker rm frontend || true
-          docker run -d -p 3000:3000 --name backend arieling/pokemon-backend
-          docker run -d -p 3001:3000 --name frontend arieling/pokemon-frontend
+          /usr/bin/docker pull arieling/pokemon-backend
+          /usr/bin/docker pull arieling/pokemon-frontend
+          /usr/bin/docker stop backend || true && /usr/bin/docker rm backend || true
+          /usr/bin/docker stop frontend || true && /usr/bin/docker rm frontend || true
+          /usr/bin/docker run -d -p 3000:3000 --name backend arieling/pokemon-backend
+          /usr/bin/docker run -d -p 3001:3000 --name frontend arieling/pokemon-frontend
+
